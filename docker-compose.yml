@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  abmix:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: abmix-voip
+    restart: unless-stopped
+    
+    # IMPORTANTE: Network mode host para permitir SIP/UDP
+    # Necessário para comunicação SIP na porta 5060/udp
+    network_mode: host
+    
+    # Alternativa se host mode não funcionar:
+    # ports:
+    #   - "5000:5000"       # HTTP/WebSocket
+    #   - "6060:6060/udp"   # SIP client
+    
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+      
+      # FaleVono Credentials (OBRIGATÓRIO)
+      - FALEVONO_PASSWORD=${FALEVONO_PASSWORD}
+      
+      # AI Services (OBRIGATÓRIO)
+      - ELEVENLABS_API_KEY=${ELEVENLABS_API_KEY}
+      - DEEPGRAM_API_KEY=${DEEPGRAM_API_KEY}
+      
+      # SobreIP Credentials (OPCIONAL)
+      - SOBREIP_PASSWORD=${SOBREIP_PASSWORD}
+      
+    volumes:
+      # Persistir banco de dados SQLite
+      - ./data:/app/data
+      
+      # Persistir gravações (se houver)
+      - ./recordings:/app/recordings
+    
+    # Logs
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    
+    # Health check
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+# Se você quiser usar volumes nomeados ao invés de bind mounts:
+# volumes:
+#   abmix-data:
+#   abmix-recordings:
