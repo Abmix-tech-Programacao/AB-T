@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teste de Acesso Público - Abmix</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .result { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #b3d7e6; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 5px; overflow: auto; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Teste de Acesso Público - Abmix API</h1>
+    
+    <p>Este teste verifica se o link público do Replit consegue acessar as variáveis de ambiente e endpoints da API.</p>
+    
+    <div>
+        <button onclick="testHealth()">🏥 Testar Health Check</button>
+        <button onclick="testValidateKeys()">🔑 Validar Chaves da API</button>
+        <button onclick="testVoices()">🎵 Testar Endpoint de Vozes</button>
+        <button onclick="testTwiML()">📞 Testar TwiML</button>
+    </div>
+    
+    <div id="results"></div>
+    
+    <script>
+        function addResult(title, content, type = 'info') {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `result ${type}`;
+            div.innerHTML = `<h3>${title}</h3><pre>${content}</pre>`;
+            results.appendChild(div);
+        }
+        
+        async function testHealth() {
+            try {
+                const response = await fetch('/api/health');
+                const data = await response.json();
+                
+                if (response.ok) {
+                    addResult('✅ Health Check - Sucesso', JSON.stringify(data, null, 2), 'success');
+                } else {
+                    addResult('❌ Health Check - Erro', `Status: ${response.status}\n${JSON.stringify(data, null, 2)}`, 'error');
+                }
+            } catch (error) {
+                addResult('❌ Health Check - Falha', `Erro de rede: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testValidateKeys() {
+            try {
+                const response = await fetch('/api/validate-keys', { method: 'POST' });
+                const data = await response.json();
+                
+                if (response.ok) {
+                    const summary = data.summary;
+                    const title = summary.invalid > 0 ? 
+                        `⚠️ Validação de Chaves - ${summary.invalid} inválidas` : 
+                        '✅ Validação de Chaves - Todas válidas';
+                    const type = summary.invalid > 0 ? 'error' : 'success';
+                    
+                    addResult(title, JSON.stringify(data, null, 2), type);
+                } else {
+                    addResult('❌ Validação de Chaves - Erro', `Status: ${response.status}\n${JSON.stringify(data, null, 2)}`, 'error');
+                }
+            } catch (error) {
+                addResult('❌ Validação de Chaves - Falha', `Erro de rede: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testVoices() {
+            try {
+                const response = await fetch('/api/voices');
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    addResult('✅ Endpoint de Vozes - Sucesso', `${data.voices.length} vozes encontradas`, 'success');
+                } else {
+                    const errorText = await response.text();
+                    addResult('❌ Endpoint de Vozes - Erro', `Status: ${response.status}\n${errorText}`, 'error');
+                }
+            } catch (error) {
+                addResult('❌ Endpoint de Vozes - Falha', `Erro de rede: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testTwiML() {
+            try {
+                const response = await fetch('/twilio/voice?voiceType=masc', { method: 'POST' });
+                const data = await response.text();
+                
+                if (response.ok) {
+                    addResult('✅ TwiML - Sucesso', data, 'success');
+                } else {
+                    addResult('❌ TwiML - Erro', `Status: ${response.status}\n${data}`, 'error');
+                }
+            } catch (error) {
+                addResult('❌ TwiML - Falha', `Erro de rede: ${error.message}`, 'error');
+            }
+        }
+        
+        // Informações do ambiente
+        addResult('📋 Informações do Ambiente', 
+            `URL atual: ${window.location.href}\n` +
+            `Host: ${window.location.host}\n` +
+            `Protocol: ${window.location.protocol}\n` +
+            `Is deployment: ${window.location.host.includes('.replit.app') ? 'SIM' : 'NÃO'}\n` +
+            `User Agent: ${navigator.userAgent}\n` +
+            `Timestamp: ${new Date().toISOString()}`, 'info');
+    </script>
+</body>
+</html>
