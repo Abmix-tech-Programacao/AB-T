@@ -53,6 +53,8 @@ export class SIPService {
   private registrationPromise: Promise<void> | null = null;
   private registrationResolve: (() => void) | null = null;
   private registrationReject: ((error: Error) => void) | null = null;
+  private registrationAttempts: number = 0;
+  private maxRegistrationAttempts: number = 3;
 
   private constructor(
     sipUsername: string,
@@ -108,6 +110,8 @@ export class SIPService {
       console.log(`[SIP_SERVICE] Local IP: ${this.localIP}`);
       console.log(`[SIP_SERVICE] Server: ${this.sipServer}:${this.sipPort}`);
       console.log(`[SIP_SERVICE] Username: ${this.sipUsername}`);
+      console.log(`[SIP_SERVICE] Environment: ${process.env.NODE_ENV || 'development'}`);
+      console.log(`[SIP_SERVICE] Password configured: ${process.env.FALEVONO_PASSWORD ? '✅ YES' : '❌ NO'}`);
       
       // Get SIP client port from environment variable (default: 7060)
       this.clientPort = parseInt(process.env.FALEVONO_SIP_PORT || '7060', 10);
@@ -191,12 +195,27 @@ export class SIPService {
         this.registrationResolve = resolve;
         this.registrationReject = reject;
         
-        // Set timeout for registration (15 seconds for TCP, 10 for UDP)
-        const timeout = useTCP ? 15000 : 10000;
-        setTimeout(() => {
+        // Set timeout for registration (30 seconds for TCP, 20 for UDP in production)
+        const isProduction = process.env.NODE_ENV === 'production';
+        const timeout = isProduction ? (useTCP ? 30000 : 20000) : (useTCP ? 15000 : 10000);
+        
+        console.log(`[SIP_SERVICE] Registration timeout set to ${timeout / 1000} seconds (${isProduction ? 'production' : 'development'} mode)`);
+        
+        setTimeout(async () => {
           if (!this.registered) {
+            // Try retry if we haven't exceeded max attempts
+            if (this.registrationAttempts < this.maxRegistrationAttempts) {
+              console.log(`[SIP_SERVICE] ⏰ Registration timeout, retrying... (${this.registrationAttempts}/${this.maxRegistrationAttempts})`);
+              try {
+                await this.register();
+                return; // Don't reject if retry is in progress
+              } catch (retryError) {
+                console.error('[SIP_SERVICE] ❌ Retry failed:', retryError);
+              }
+            }
+            
             const env = process.env.NODE_ENV || 'production';
-            let errorMsg = `SIP registration timeout after ${timeout / 1000} seconds`;
+            let errorMsg = `SIP registration timeout after ${timeout / 1000} seconds (${this.registrationAttempts} attempts)`;
             
             if (env === 'development') {
               errorMsg += '\n\n⚠️  REPLIT LIMITATION: UDP ports are blocked in development.\n';
@@ -204,6 +223,13 @@ export class SIPService {
               errorMsg += '1. Set SIP_USE_TCP=true to try TCP (may not work with all providers)\n';
               errorMsg += '2. Deploy to production (EasyPanel/VPS) where UDP works\n';
               errorMsg += '3. Test locally with Docker\n';
+            } else {
+              errorMsg += '\n\n🔧 PRODUCTION TROUBLESHOOTING:\n';
+              errorMsg += '1. Check if UDP port 5060 is accessible from EasyPanel\n';
+              errorMsg += '2. Verify FALEVONO_PASSWORD is correct\n';
+              errorMsg += '3. Try TCP fallback: Set SIP_USE_TCP=true\n';
+              errorMsg += '4. Check if SIP server vono2.me:5060 is reachable\n';
+              errorMsg += '5. Check network connectivity to vono2.me\n';
             }
             
             reject(new Error(errorMsg));
@@ -221,7 +247,13 @@ export class SIPService {
 
   private async register(authChallenge?: any): Promise<void> {
     const isReregister = !!authChallenge;
-    console.log(`[SIP_SERVICE] ${isReregister ? 'Re-registering with auth' : 'Registering'}...`);
+    
+    if (!isReregister) {
+      this.registrationAttempts++;
+      console.log(`[SIP_SERVICE] Registration attempt ${this.registrationAttempts}/${this.maxRegistrationAttempts}`);
+    } else {
+      console.log(`[SIP_SERVICE] Re-registering with auth challenge...`);
+    }
     
     const callId = this.authSession.callId || randomUUID();
     const tag = this.authSession.tag || randomUUID();

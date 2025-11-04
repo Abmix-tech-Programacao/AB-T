@@ -14,6 +14,12 @@ O erro `TypeError: sip.send is not a function` indica que o stack SIP não está
 - ✅ Melhor tratamento de erros na inicialização
 - ✅ Verificação de disponibilidade antes de cada uso
 
+### 2. Sistema de Retry e Timeouts Melhorados
+- ✅ Timeout aumentado para produção (20s UDP, 30s TCP)
+- ✅ Sistema de retry automático (até 3 tentativas)
+- ✅ Melhor logging para diagnóstico
+- ✅ Detecção de ambiente (desenvolvimento vs produção)
+
 ### 2. Configurações de Ambiente Necessárias
 
 No EasyPanel, configure estas variáveis de ambiente:

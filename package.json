@@ -12,6 +12,7 @@
     "db:push": "drizzle-kit push",
     "check-env": "node scripts/check-env.cjs",
     "check-prod-env": "node scripts/check-production-env.js",
+    "test-sip": "node scripts/test-sip-connectivity.js",
     "test:voice": "tsx server/testVoiceConversion.ts",
     "test:system": "node scripts/test-complete-system.cjs",
     "restart": "node scripts/restart-server.cjs",
