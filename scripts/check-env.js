@@ -94,7 +94,7 @@ if (allGood) {
   
   console.log('\n🚀 Para testar:');
   console.log('1. Execute: npm run dev');
-  console.log('2. Acesse: http://localhost:5000');
+  console.log('2. Acesse: http://localhost:5001');
   console.log('3. Digite seu número e clique "Discar"');
   console.log('4. Atenda a ligação');
   console.log('5. Ative o switch "Conversão de Voz"');

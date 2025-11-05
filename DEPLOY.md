@@ -190,7 +190,7 @@ Se é sua primeira vez usando EasyPanel com GitHub:
 | Campo | Valor |
 |-------|-------|
 | **Application Name** | `abmix` |
-| **Port** | `5000` |
+| **Port** | `5001` |
 
 > 💡 **Dica:** O nome `abmix` será usado na URL e nos logs.
 
@@ -223,7 +223,7 @@ Para cada variável abaixo, faça:
 | Nome | Valor | Onde Obter |
 |------|-------|------------|
 | `NODE_ENV` | `production` | Digite exatamente assim |
-| `PORT` | `5000` | Digite exatamente assim |
+| `PORT` | `5001` | Digite exatamente assim |
 | `FALEVONO_PASSWORD` | Sua senha FaleVono | Sua conta vono2.me |
 | `ELEVENLABS_API_KEY` | Sua chave ElevenLabs | Ver seção 4.4 |
 | `DEEPGRAM_API_KEY` | Sua chave Deepgram | Ver seção 4.5 |
@@ -232,9 +232,9 @@ Para cada variável abaixo, faça:
 
 | Nome | Valor Padrão | Quando Alterar |
 |------|--------------|----------------|
-| `FALEVONO_SIP_PORT` | `6060` | Se outra aplicação já estiver usando a porta 6060 |
+| `FALEVONO_SIP_PORT` | `7060` | Se outra aplicação já estiver usando a porta 7060 |
 
-> 💡 **Nota sobre Porta SIP:** A porta 6060 é usada para comunicação SIP cliente. Se você tem outra aplicação de telefonia rodando no mesmo servidor que usa a porta 6060, configure esta variável para uma porta diferente (exemplo: `7060`, `8060`, etc).
+> 💡 **Nota sobre Porta SIP:** A porta 7060 é usada para comunicação SIP cliente. Se você tem outra aplicação de telefonia rodando no mesmo servidor que usa a porta 7060, configure esta variável para uma porta diferente (exemplo: `7060`, `8060`, etc).
 
 ### 4.4 - Como Obter API Key do ElevenLabs
 
@@ -303,8 +303,8 @@ Adicione as seguintes portas:
 
 | Container Port | Protocol | Published Port | Descrição |
 |----------------|----------|----------------|-----------|
-| `5000` | TCP | `5000` | Interface web |
-| `6060` | UDP | `6060` | Cliente SIP (pode variar, veja `FALEVONO_SIP_PORT`) |
+| `5001` | TCP | `5001` | Interface web |
+| `7060` | UDP | `7060` | Cliente SIP (pode variar, veja `FALEVONO_SIP_PORT`) |
 
 **Como adicionar:**
 1. Procure por **"Port Mappings"** ou **"Ports"**
@@ -331,7 +331,7 @@ Antes de fazer deploy, confirme:
 - ✅ Repositório GitHub conectado
 - ✅ Branch: `main`
 - ✅ Dockerfile Path: `Dockerfile`
-- ✅ Porta: `5000`
+- ✅ Porta: `5001`
 - ✅ Variáveis de ambiente configuradas (5 obrigatórias)
 - ✅ Network Mode: `host` (OU portas mapeadas)
 
@@ -375,7 +375,7 @@ Quando terminar, o status deve mostrar:
 
 - ✅ **Status:** `Running` (verde)
 - ✅ **Health:** `Healthy` (verde)
-- ✅ **URL:** `http://seu-ip:5000` ou `https://seu-dominio.com`
+- ✅ **URL:** `http://seu-ip:5001` ou `https://seu-dominio.com`
 
 ---
 
@@ -388,7 +388,7 @@ Acesse a URL do seu app:
 ```
 https://seu-dominio.com
 OU
-http://IP-DO-VPS:5000
+http://IP-DO-VPS:5001
 ```
 
 **O que você deve ver:**
@@ -435,7 +435,7 @@ No EasyPanel:
 [SIP_SERVICE] <<< RECEIVED: 200 OK
 [SIP_SERVICE] ✅ Registration successful! Expires: 3600s
 [ROUTES] API routes configured
-HTTP/WS server listening on port 5000
+HTTP/WS server listening on port 5001
 ```
 
 > 💡 **Atenção:** Se você ver `❌ Registration failed`, vá para a seção [Troubleshooting](#-troubleshooting).
@@ -542,11 +542,11 @@ Alguns painéis EasyPanel têm **auto-deploy** automático:
 1. **Network Mode não está configurado como `host`**
    - ✅ Solução: Vá em Advanced → Network Mode → Selecione `host` → Redeploy
 
-2. **Porta UDP 6060 bloqueada no firewall do VPS**
+2. **Porta UDP 7060 bloqueada no firewall do VPS**
    - ✅ Solução: Acesse o VPS via SSH e execute:
    ```bash
-   sudo ufw allow 6060/udp
-   sudo ufw allow 5000/tcp
+   sudo ufw allow 7060/udp
+   sudo ufw allow 5001/tcp
    sudo ufw reload
    ```
 
@@ -581,7 +581,7 @@ ERROR: failed to solve: process "/bin/sh -c npm install" did not complete succes
 
 ### ❌ Problema: "Cannot GET /"
 
-**Sintoma:** Ao acessar `http://seu-ip:5000`, aparece:
+**Sintoma:** Ao acessar `http://seu-ip:5001`, aparece:
 ```
 Cannot GET /
 ```
@@ -593,7 +593,7 @@ Cannot GET /
    - Procure por erros na etapa `vite build`
 
 2. **Porta incorreta**
-   - ✅ Solução: Confirme que a variável `PORT=5000` está definida
+   - ✅ Solução: Confirme que a variável `PORT=5001` está definida
 
 ---
 
@@ -614,15 +614,15 @@ Cannot GET /
 
 ---
 
-### ❌ Problema: "Port 5000 Already in Use"
+### ❌ Problema: "Port 5001 Already in Use"
 
 **Sintoma:**
 ```
-Error: listen EADDRINUSE: address already in use :::5000
+Error: listen EADDRINUSE: address already in use :::5001
 ```
 
 **Solução:**
-1. Outro app está usando a porta 5000
+1. Outro app está usando a porta 5001
 2. Mude a porta no EasyPanel para `5001` ou `8000`
 3. Atualize a variável `PORT=5001`
 4. Redeploy
@@ -693,11 +693,11 @@ Antes de considerar o deploy **100% completo**, marque todos os itens:
 - [ ] App criado no EasyPanel
 - [ ] Dockerfile Path: `Dockerfile`
 - [ ] Branch: `main`
-- [ ] Port: `5000`
+- [ ] Port: `5001`
 
 ### Variáveis de Ambiente
 - [ ] `NODE_ENV=production`
-- [ ] `PORT=5000`
+- [ ] `PORT=5001`
 - [ ] `FALEVONO_PASSWORD` (senha correta)
 - [ ] `ELEVENLABS_API_KEY` (chave válida)
 - [ ] `DEEPGRAM_API_KEY` (chave válida)
@@ -705,7 +705,7 @@ Antes de considerar o deploy **100% completo**, marque todos os itens:
 ### Configurações Avançadas
 - [ ] **Network Mode: `host`** (CRÍTICO!)
 - [ ] Restart Policy: `unless-stopped`
-- [ ] Firewall liberado (portas 5000/TCP e 6060/UDP)
+- [ ] Firewall liberado (portas 5001/TCP e 7060/UDP)
 
 ### Testes de Funcionamento
 - [ ] Interface web abre no navegador
@@ -751,8 +751,8 @@ docker exec -it abmix sh
 docker restart abmix
 
 # Verificar portas abertas
-sudo netstat -tulpn | grep 5000
-sudo netstat -tulpn | grep 6060
+sudo netstat -tulpn | grep 5001
+sudo netstat -tulpn | grep 7060
 ```
 
 ### Links Úteis

@@ -68,10 +68,10 @@ if (isProduction) {
   console.log('⚠️  NODE_ENV não é "production"');
 }
 
-const sipPort = process.env.FALEVONO_SIP_PORT || '6060';
+const sipPort = process.env.FALEVONO_SIP_PORT || '7060';
 console.log(`✅ FALEVONO_SIP_PORT: ${sipPort}`);
 
-const serverPort = process.env.PORT || '5000';
+const serverPort = process.env.PORT || '5001';
 console.log(`✅ PORT: ${serverPort}`);
 
 console.log('\n📝 Recomendações para EasyPanel:');
@@ -80,7 +80,7 @@ console.log('2. Configure FALEVONO_PASSWORD com a senha do seu provedor SIP');
 console.log('3. Configure ELEVENLABS_API_KEY para síntese de voz');
 console.log('4. Configure DEEPGRAM_API_KEY para reconhecimento de voz');
 console.log('5. Para produção, deixe SIP_USE_TCP=false (UDP é mais estável)');
-console.log('6. Use PORT=5000 ou a porta configurada no EasyPanel');
+console.log('6. Use PORT=5001 ou a porta configurada no EasyPanel');
 console.log('7. Configure FALEVONO_PUBLIC_IP com o IP publico do servidor quando estiver atras de NAT');
 
 if (hasErrors) {

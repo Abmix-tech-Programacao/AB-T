@@ -11,7 +11,7 @@ async function testSystem() {
   
   // Teste 1: Servidor respondendo
   try {
-    const response = await makeRequest('GET', 'http://localhost:5000/api/health');
+    const response = await makeRequest('GET', 'http://localhost:5001/api/health');
     if (response.status === 200) {
       console.log('   ✅ Servidor local funcionando');
     } else {
@@ -28,7 +28,7 @@ async function testSystem() {
   
   // Teste 2: API de discagem
   try {
-    const response = await makeRequest('POST', 'http://localhost:5000/api/call/dial', {
+    const response = await makeRequest('POST', 'http://localhost:5001/api/call/dial', {
       to: '+5511999999999',
       voiceType: 'fem'
     });
@@ -42,7 +42,7 @@ async function testSystem() {
       // Teste 3: Controle de conversão de voz
       console.log('\n3. 🔄 Testando controle de conversão...');
       
-      const toggleResponse = await makeRequest('POST', 'http://localhost:5000/api/voice/toggle', {
+      const toggleResponse = await makeRequest('POST', 'http://localhost:5001/api/voice/toggle', {
         callSid: data.callSid,
         enabled: true
       });
@@ -54,7 +54,7 @@ async function testSystem() {
       }
       
       // Teste 4: Status da conversão
-      const statusResponse = await makeRequest('GET', `http://localhost:5000/api/voice/status/${data.callSid}`);
+      const statusResponse = await makeRequest('GET', `http://localhost:5001/api/voice/status/${data.callSid}`);
       
       if (statusResponse.status === 200) {
         const statusData = JSON.parse(statusResponse.data);
@@ -73,10 +73,10 @@ async function testSystem() {
   console.log('\n4. 📱 Teste do Frontend...');
   
   try {
-    const frontendResponse = await makeRequest('GET', 'http://localhost:5000/');
+    const frontendResponse = await makeRequest('GET', 'http://localhost:5001/');
     if (frontendResponse.status === 200) {
       console.log('   ✅ Frontend carregando corretamente');
-      console.log('   🌐 Acesse: http://localhost:5000');
+      console.log('   🌐 Acesse: http://localhost:5001');
     }
   } catch (error) {
     console.log('   ❌ Erro no frontend:', error.message);

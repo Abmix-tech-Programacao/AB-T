@@ -29,9 +29,9 @@ NODE_ENV=production
 FALEVONO_PASSWORD=sua_senha_falevono
 ELEVENLABS_API_KEY=sua_chave_elevenlabs
 DEEPGRAM_API_KEY=sua_chave_deepgram
-PORT=5000
+PORT=5001
 SIP_USE_TCP=false
-FALEVONO_SIP_PORT=6060
+FALEVONO_SIP_PORT=7060
 ```
 
 ### 3. Verificação da Configuração
@@ -58,7 +58,7 @@ npm run check-prod-env
 ### 2. Configuração de Rede
 - Certifique-se de que as portas UDP estão liberadas
 - Porta padrão SIP: 5060 (servidor)
-- Porta cliente SIP: 6060 (configurável via FALEVONO_SIP_PORT)
+- Porta cliente SIP: 7060 (configurável via FALEVONO_SIP_PORT)
 
 ### 3. Logs de Diagnóstico
 Após o deploy, verifique os logs para:

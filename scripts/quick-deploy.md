@@ -41,7 +41,7 @@ NODE_ENV=production
 - Use Let's Encrypt ou certificado próprio
 
 #### **3. Nginx (Recomendado):**
-Configure proxy para porta 5000 e WebSocket
+Configure proxy para porta 5001 e WebSocket
 
 ### **🚀 Processo Completo:**
 

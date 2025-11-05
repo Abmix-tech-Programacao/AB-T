@@ -14,7 +14,7 @@ ssh $VPS_HOST << EOF
 cd $VPS_PATH
 
 echo "📝 1. Atualizando .env para porta 3000..."
-sed -i 's/PORT=5000/PORT=3000/g' .env
+sed -i 's/PORT=5001/PORT=3000/g' .env
 echo "   ✅ .env atualizado"
 
 echo ""

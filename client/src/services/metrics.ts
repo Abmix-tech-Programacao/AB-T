@@ -33,7 +33,7 @@ export const metricsService = {
         if (eventSource?.readyState === EventSource.CLOSED) {
           this.connect(callback);
         }
-      }, 5000);
+      }, 5001);
     };
 
     console.log('[METRICS] Connected to metrics stream');

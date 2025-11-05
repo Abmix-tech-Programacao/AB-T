@@ -37,7 +37,7 @@ async function testTCP() {
   return new Promise((resolve) => {
     const socket = net.createConnection(SIP_PORT, SIP_SERVER);
     
-    socket.setTimeout(5000);
+    socket.setTimeout(5001);
     
     socket.on('connect', () => {
       console.log(`✅ TCP OK: Conectado a ${SIP_SERVER}:${SIP_PORT}`);
@@ -122,7 +122,7 @@ function testEnvironment() {
 async function testLocalPorts() {
   console.log('\n5️⃣ Verificando portas locais...');
   try {
-    const { stdout } = await execAsync('netstat -tulpn 2>/dev/null | grep -E ":(5000|5001|7060|6060)" || echo "Nenhuma porta SIP em uso"');
+    const { stdout } = await execAsync('netstat -tulpn 2>/dev/null | grep -E ":(5001|5001|7060|7060)" || echo "Nenhuma porta SIP em uso"');
     console.log('📊 Portas em uso:');
     console.log(stdout || 'Nenhuma porta SIP detectada');
   } catch (error) {

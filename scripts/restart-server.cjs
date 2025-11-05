@@ -6,10 +6,10 @@ const https = require('https');
 
 console.log('🔄 Reiniciando servidor AbmixDialer...\n');
 
-// Função para matar processos na porta 5000
+// Função para matar processos na porta 5001
 function killPort5000() {
   return new Promise((resolve) => {
-    exec('netstat -ano | findstr :5000', (error, stdout) => {
+    exec('netstat -ano | findstr :5001', (error, stdout) => {
       if (error) {
         resolve();
         return;
@@ -29,7 +29,7 @@ function killPort5000() {
       });
       
       if (pids.size > 0) {
-        console.log(`🔪 Matando processos na porta 5000: ${Array.from(pids).join(', ')}`);
+        console.log(`🔪 Matando processos na porta 5001: ${Array.from(pids).join(', ')}`);
         pids.forEach(pid => {
           exec(`taskkill /F /PID ${pid}`, (err) => {
             if (err) console.log(`   ⚠️  Erro ao matar PID ${pid}: ${err.message}`);
@@ -51,7 +51,7 @@ function testServer() {
     
     const options = {
       hostname: 'localhost',
-      port: 5000,
+      port: 5001,
       path: '/api/call/dial',
       method: 'POST',
       headers: {
@@ -75,7 +75,7 @@ function testServer() {
       resolve(false);
     });
     
-    req.setTimeout(5000, () => {
+    req.setTimeout(5001, () => {
       console.log('❌ Timeout ao testar servidor');
       req.destroy();
       resolve(false);
@@ -143,7 +143,7 @@ async function main() {
     
     if (isWorking) {
       console.log('\n🎉 SERVIDOR PRONTO!');
-      console.log('   📱 Acesse: http://localhost:5000');
+      console.log('   📱 Acesse: http://localhost:5001');
       console.log('   🔧 Configure suas chaves no modal');
       console.log('   📞 Teste uma ligação com conversão de voz!');
       console.log('\n💡 Para parar o servidor: Ctrl+C no terminal onde está rodando');

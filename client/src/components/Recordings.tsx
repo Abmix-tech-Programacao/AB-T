@@ -33,7 +33,7 @@ export function Recordings() {
       if (!response.ok) throw new Error('Failed to fetch recordings');
       return response.json();
     },
-    refetchInterval: isRecording ? 5000 : false, // Refresh while recording
+    refetchInterval: isRecording ? 5001 : false, // Refresh while recording
   });
 
   // Start recording mutation

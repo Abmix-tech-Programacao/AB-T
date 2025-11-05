@@ -82,7 +82,7 @@ app.use((req, res, next) => {
   }
 
   // Start server
-  const port = parseInt(process.env.PORT || '5000', 10);
+  const port = parseInt(process.env.PORT || '5001', 10);
   const listenOptions: ListenOptions = {
     port,
     host: "0.0.0.0",

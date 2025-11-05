@@ -105,7 +105,7 @@ function testUserEndpoint() {
       resolve(false);
     });
 
-    req.setTimeout(5000, () => {
+    req.setTimeout(5001, () => {
       console.log('   ❌ Timeout');
       req.destroy();
       resolve(false);
@@ -159,7 +159,7 @@ function testVoicesEndpoint() {
       resolve(false);
     });
 
-    req.setTimeout(5000, () => {
+    req.setTimeout(5001, () => {
       console.log('   ❌ Timeout');
       req.destroy();
       resolve(false);

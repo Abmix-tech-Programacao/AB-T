@@ -60,7 +60,7 @@ export function VoiceConversionControl({
       fetchStatus();
       
       // Poll status every 5 seconds during call
-      const interval = setInterval(fetchStatus, 5000);
+      const interval = setInterval(fetchStatus, 5001);
       return () => clearInterval(interval);
     }
   }, [callSid, isInCall]);

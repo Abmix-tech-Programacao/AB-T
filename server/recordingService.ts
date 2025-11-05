@@ -309,7 +309,7 @@ export class RecordingService {
     const updateInterval = setInterval(() => {
       // In production, this would handle real audio stream processing
       console.log(`[RECORDING] Recording ${recordingId} in progress...`);
-    }, 5000);
+    }, 5001);
 
     // Store the interval for cleanup
     this.activeRecordings.set(recordingId, updateInterval);

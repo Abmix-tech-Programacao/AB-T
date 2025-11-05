@@ -1265,7 +1265,7 @@ export async function registerRoutes(app: Express) {
       const recording = await twilioClient.calls(callSid).recordings.create({
         recordingTrack: 'both',
         trim: 'do-not-trim',
-        recordingStatusCallback: `${process.env.REPL_SLUG ? `https://${process.env.REPL_SLUG}.${process.env.REPLIT_DEV_DOMAIN}` : 'http://localhost:5000'}/api/recordings/twilio/callback`
+        recordingStatusCallback: `${process.env.REPL_SLUG ? `https://${process.env.REPL_SLUG}.${process.env.REPLIT_DEV_DOMAIN}` : 'http://localhost:5001'}/api/recordings/twilio/callback`
       });
 
       const timestamp = Date.now();
